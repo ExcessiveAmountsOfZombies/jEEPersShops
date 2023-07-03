@@ -132,7 +132,7 @@ artifacts {
 jar {
     manifest {
         attributes([
-                "Specification-Title": "${modName}",
+                "Specification-Title": "jEEPersShops",
                 "Specification-Vendor": "epherical.com",
                 "Specification-Version": "1",
                 "Implementation-Title": "${modBaseArchiveName}",

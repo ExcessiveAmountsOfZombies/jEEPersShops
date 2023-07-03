@@ -1,4 +1,4 @@
-package com.epherical.bozo.client;
+package com.epherical.jeepershops.client;
 
 public class CommonClient {
 

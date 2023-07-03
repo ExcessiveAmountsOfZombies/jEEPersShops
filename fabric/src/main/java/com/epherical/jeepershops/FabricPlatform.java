@@ -1,4 +1,4 @@
-package com.epherical.bozo;
+package com.epherical.jeepershops;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;

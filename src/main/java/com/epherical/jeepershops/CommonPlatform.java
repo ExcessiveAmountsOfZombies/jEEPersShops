@@ -1,4 +1,4 @@
-package com.epherical.bozo;
+package com.epherical.jeepershops;
 
 import java.nio.file.Path;
 

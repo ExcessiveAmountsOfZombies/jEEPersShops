@@ -10,7 +10,7 @@ modId="${modId}" #mandatory
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
 version="0.1.2" #mandatory ugh
-displayName="${modName}" #mandatory
+displayName="jEEPersShops" #mandatory
 #updateJSONURL="http://myurl.me/" #optional
 displayURL="https://discord.gg/GZjtAn3F6W" #optional
 #logoFile="croptopia-forge.png" #optional

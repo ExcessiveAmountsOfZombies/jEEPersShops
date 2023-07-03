@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "${modId}",
+  "id": "jeepers_shops",
   "version": "${version}",
-  "name": "${modName}",
+  "name": "jEEPersShops",
   "description": "",
   "authors": [
     "Thonk"
@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.epherical.bozo.BozoFabric"
+      "com.epherical.jeepershops.BozoFabric"
     ]
   },
   "mixins": [
@@ -27,6 +27,6 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": "1.18.2"
+    "minecraft": "1.20.1"
   }
 }

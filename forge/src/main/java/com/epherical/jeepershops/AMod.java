@@ -1,6 +1,6 @@
-package com.epherical.bozo;
+package com.epherical.jeepershops;
 
-import com.epherical.bozo.client.AModClient;
+import com.epherical.jeepershops.client.AModClient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
