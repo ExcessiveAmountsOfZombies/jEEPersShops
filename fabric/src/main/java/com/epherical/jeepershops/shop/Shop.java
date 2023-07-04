@@ -90,7 +90,7 @@ public class Shop {
     public void confirmPurchaseMenu(ServerPlayer player, int slot) {
         MutableComponent title = Component.literal("Confirm Purchase");
         SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player1) -> {
-            ConfirmPurchaseMenu menu = new ConfirmPurchaseMenu(MenuType.GENERIC_9x1, i, inventory, 1, this);
+            ConfirmPurchaseMenu menu = new ConfirmPurchaseMenu(MenuType.GENERIC_9x1, i, inventory, 1, this, slot);
             ShopStack stack = this.items.get(slot);
             for (int j = 0; j < 4; ++j) {
                 menu.getContainer().setItem(j, new ItemStack(Items.GREEN_STAINED_GLASS_PANE).setHoverName(Component.nullToEmpty("Purchase for " + stack.getPrice())));
@@ -102,5 +102,15 @@ public class Shop {
             return menu;
         }, title);
         player.openMenu(provider);
+    }
+
+    public void attemptPurchase(int slot, ServerPlayer player) {
+        ShopStack stack = this.items.get(slot);
+        if (stack.attemptPurchase(player)) {
+            player.sendSystemMessage(Component.literal("You have purchased: ").append(stack.getItemStack().getHoverName()).append(" For " + stack.getPrice()));
+            this.items.remove(slot);
+        } else {
+            player.sendSystemMessage(Component.literal("Purchase could not be completed."));
+        }
     }
 }
