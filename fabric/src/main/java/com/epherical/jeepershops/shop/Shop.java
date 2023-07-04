@@ -2,6 +2,7 @@ package com.epherical.jeepershops.shop;
 
 import com.epherical.jeepershops.BozoFabric;
 import com.epherical.jeepershops.ShopStorage;
+import com.epherical.jeepershops.menu.ConfirmPurchaseMenu;
 import com.epherical.jeepershops.menu.ShopMenu;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -9,8 +10,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.UUID;
 
@@ -30,7 +33,7 @@ public class Shop {
     public void openShop(ServerPlayer serverPlayer) {
         MutableComponent empty = Component.literal("Shop Owned By: ").append(username);
         SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player) -> {
-            ShopMenu shopMenu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3, this);
+            ShopMenu shopMenu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3, Shop.this);
             int size = items.size();
             for (int item = 0; item < size; item++) {
                 shopMenu.getContainer().setItem(item, items.get(item).displayStack());
@@ -82,5 +85,22 @@ public class Shop {
 
     public String getUsername() {
         return username;
+    }
+
+    public void confirmPurchaseMenu(ServerPlayer player, int slot) {
+        MutableComponent title = Component.literal("Confirm Purchase");
+        SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player1) -> {
+            ConfirmPurchaseMenu menu = new ConfirmPurchaseMenu(MenuType.GENERIC_9x1, i, inventory, 1, this);
+            ShopStack stack = this.items.get(slot);
+            for (int j = 0; j < 4; ++j) {
+                menu.getContainer().setItem(j, new ItemStack(Items.GREEN_STAINED_GLASS_PANE).setHoverName(Component.nullToEmpty("Purchase for " + stack.getPrice())));
+            }
+            for (int j = 5; j < 9; ++j) {
+                menu.getContainer().setItem(j, new ItemStack(Items.RED_STAINED_GLASS_PANE).setHoverName(Component.nullToEmpty("Cancel")));
+            }
+            menu.getContainer().setItem(4, stack.getItemStack());
+            return menu;
+        }, title);
+        player.openMenu(provider);
     }
 }

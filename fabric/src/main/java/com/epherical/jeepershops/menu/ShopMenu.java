@@ -16,6 +16,10 @@ public class ShopMenu extends ExpandedMenu {
 
     @Override
     public SlotBuilder createSlot() {
-        return (container, slotID, xPos, yPos) -> new ShopSlot(container, slotID, xPos, yPos, shop);
+        return (container, slotID, xPos, yPos) -> new ShopSlot(container, slotID, xPos, yPos, ShopMenu.this);
+    }
+
+    public Shop getShop() {
+        return shop;
     }
 }
