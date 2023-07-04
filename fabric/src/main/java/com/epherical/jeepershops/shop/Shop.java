@@ -30,7 +30,7 @@ public class Shop {
     public void openShop(ServerPlayer serverPlayer) {
         MutableComponent empty = Component.literal("Shop Owned By: ").append(username);
         SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player) -> {
-            ShopMenu shopMenu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3);
+            ShopMenu shopMenu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3, this);
             int size = items.size();
             for (int item = 0; item < size; item++) {
                 shopMenu.getContainer().setItem(item, items.get(item).displayStack());
@@ -41,7 +41,7 @@ public class Shop {
     }
 
     public boolean addItem(ItemStack itemStack, double price) {
-        if (items.size() > 27) {
+        if (items.size() >= 27) {
             return false;
         } else {
             ShopStack stack = new ShopStack(itemStack.copyAndClear(), price);

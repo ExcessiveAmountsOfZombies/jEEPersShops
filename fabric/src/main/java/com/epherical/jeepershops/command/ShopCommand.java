@@ -6,6 +6,7 @@ import com.epherical.jeepershops.menu.ShopMenu;
 import com.epherical.jeepershops.shop.Shop;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,10 +28,33 @@ public class ShopCommand {
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("shop")
                 .then(Commands.literal("create")
                         .executes(this::createShop))
+                .then(Commands.literal("open")
+                        .executes(this::createShop)
+                        .then(Commands.argument("name", StringArgumentType.word())
+                                .executes(this::openShop)))
                 .then(Commands.literal("insert")
                         .then(Commands.argument("price", DoubleArgumentType.doubleArg(0.0))
                                 .executes(this::insertItemIntoShop)));
         dispatcher.register(command);
+    }
+
+    private int openShop(CommandContext<CommandSourceStack> stack) {
+        try {
+            ServerPlayer player = stack.getSource().getPlayer();
+            if (player != null && mod.getManager() != null) {
+              ShopManager manager = mod.getManager();
+              String arg = StringArgumentType.getString(stack, "name");
+                Shop shop = manager.getShop(arg);
+                if (shop != null) {
+                    shop.openShop(player);
+                } else {
+                    player.sendSystemMessage(Component.translatable("The shop entered: %s does not exist.", arg));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 1;
     }
 
 
@@ -57,9 +81,11 @@ public class ShopCommand {
                 return 1;
             }
             Shop shop = mod.getManager().getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
-            shop.addItem(itemInHand, DoubleArgumentType.getDouble(stack, "price"));
-            // todo; check if shop is already full.
-
+            if (shop.addItem(itemInHand, DoubleArgumentType.getDouble(stack, "price"))) {
+                player.sendSystemMessage(Component.nullToEmpty("Item Added to shop."));
+            } else {
+                player.sendSystemMessage(Component.nullToEmpty("Shop is full, item could not be added."));
+            }
         }
 
         return 1;

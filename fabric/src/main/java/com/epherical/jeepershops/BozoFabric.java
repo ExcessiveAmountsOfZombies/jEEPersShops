@@ -24,6 +24,9 @@ public class BozoFabric implements ModInitializer {
             storage = new ShopStorage(LevelResource.ROOT, server, "epherical/shops");
             manager = new ShopManager(storage);
         });
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            manager.clear();
+        });
     }
 
     public ShopStorage getStorage() {

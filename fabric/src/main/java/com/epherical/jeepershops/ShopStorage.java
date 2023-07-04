@@ -11,8 +11,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.LevelResource;
 
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class ShopStorage extends WorldBasedStorage {
 
@@ -30,6 +34,9 @@ public class ShopStorage extends WorldBasedStorage {
         return basePath.resolve(uuid.toString() + ".json");
     }
 
+    public Stream<Path> findAllShops() throws IOException {
+        return Files.walk(basePath, FileVisitOption.FOLLOW_LINKS);
+    }
 
     public static CompoundTag saveAllItems(CompoundTag tag, NonNullList<ShopStack> list) {
         return saveAllItems(tag, list, true);
@@ -38,11 +45,10 @@ public class ShopStorage extends WorldBasedStorage {
     public static CompoundTag saveAllItems(CompoundTag tag, NonNullList<ShopStack> list, boolean force) {
         ListTag listOfItems = new ListTag();
 
-        for(int i = 0; i < list.size(); ++i) {
-            ShopStack itemStack = list.get(i);
+        for (ShopStack itemStack : list) {
             if (!itemStack.isEmpty()) {
                 CompoundTag slottedItem = new CompoundTag();
-                slottedItem.putByte("Slot", (byte)i);
+                //slottedItem.putByte("Slot", (byte)i);
                 itemStack.getItemStack().save(slottedItem);
                 slottedItem.putDouble("price", itemStack.getPrice());
                 listOfItems.add(slottedItem);
@@ -61,13 +67,12 @@ public class ShopStorage extends WorldBasedStorage {
 
         for(int i = 0; i < items.size(); ++i) {
             CompoundTag slottedItem = items.getCompound(i);
-            int slot = slottedItem.getByte("Slot") & 255;
-            if (slot < nonNullList.size()) {
-                ShopStack stack = new ShopStack(ItemStack.of(slottedItem), slottedItem.getDouble("price"));
-                nonNullList.set(slot, stack);
-            }
+            //int slot = slottedItem.getByte("Slot") & 255;
+            ShopStack stack = new ShopStack(ItemStack.of(slottedItem), slottedItem.getDouble("price"));
+            nonNullList.add(stack);
         }
-
     }
+
+
 
 }
