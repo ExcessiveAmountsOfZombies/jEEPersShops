@@ -1,18 +1,13 @@
 package com.epherical.jeepershops.shop;
 
 import com.epherical.jeepershops.BozoFabric;
-import com.epherical.jeepershops.ShopManager;
+import com.epherical.jeepershops.ShopStorage;
 import com.epherical.jeepershops.menu.ShopMenu;
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
-import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
@@ -23,45 +18,51 @@ public class Shop {
 
     private UUID owner;
     private String username;
-
-    private SimpleMenuProvider provider;
-    private ShopMenu menu;
-    private Container container;
+    private NonNullList<ShopStack> items = NonNullList.createWithCapacity(27);
 
 
     public Shop(UUID owner, String username) {
         this.owner = owner;
         this.username = username;
+    }
+
+
+    public void openShop(ServerPlayer serverPlayer) {
         MutableComponent empty = Component.literal("Shop Owned By: ").append(username);
-        this.provider = new SimpleMenuProvider((i, inventory, player) ->
-                this.menu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3), empty);
+        SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player) -> {
+            ShopMenu shopMenu = new ShopMenu(MenuType.GENERIC_9x3, i, inventory, 3);
+            int size = items.size();
+            for (int item = 0; item < size; item++) {
+                shopMenu.getContainer().setItem(item, items.get(item).displayStack());
+            }
+            return shopMenu;
+        }, empty);
+        serverPlayer.openMenu(provider);
     }
 
-
-
-    public void openShop(ServerPlayer player) {
-        player.openMenu(provider);
+    public boolean addItem(ItemStack itemStack, double price) {
+        if (items.size() > 27) {
+            return false;
+        } else {
+            ShopStack stack = new ShopStack(itemStack.copyAndClear(), price);
+            items.add(stack);
+            saveFile(this);
+        }
+        return true;
     }
 
-    public void addItem(ItemStack itemStack) {
-        // TODO; add logic
-        saveFile(this);
-    }
-
-    public void load(CompoundTag tag) {
-        // TODO; this is going to be null, the menu is only ever created once the player has opened the menu
-        //  for the first time
-        ContainerHelper.loadAllItems(tag, menu.getItems());
+    public void loadFromTag(CompoundTag tag) {
+        ShopStorage.loadAllItems(tag, items);
     }
 
     public void saveToTag(CompoundTag tag) {
-        ContainerHelper.saveAllItems(tag, menu.getItems());
+        tag.putUUID("uuid", getOwner());
+        tag.putString("name", getUsername());
+        ShopStorage.saveAllItems(tag, items);
     }
 
     public static void saveFile(Shop shop) {
         CompoundTag tag = new CompoundTag();
-        tag.putUUID("uuid", shop.getOwner());
-        tag.putString("name", shop.getUsername());
         shop.saveToTag(tag);
         BozoFabric.instance.getManager().saveShopToFile(shop, tag);
     }
@@ -70,7 +71,7 @@ public class Shop {
         UUID uuid = tag.getUUID("uuid");
         String username = tag.getString("name");
         Shop shop = new Shop(uuid, username);
-        shop.load(tag);
+        shop.loadFromTag(tag);
 
         return shop;
     }

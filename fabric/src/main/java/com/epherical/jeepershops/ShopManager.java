@@ -23,7 +23,11 @@ public class ShopManager {
     }
 
     public Shop getOrCreateShop(UUID uuid, String userName) {
-        return shopByUUID.getOrDefault(uuid, createShop(uuid, userName));
+        if (shopByUUID.containsKey(uuid)) {
+            return shopByUUID.get(uuid);
+        } else {
+            return createShop(uuid, userName);
+        }
     }
 
     public Shop getShop(String userName) {

@@ -35,11 +35,15 @@ public class ShopCommand {
 
 
     private int createShop(CommandContext<CommandSourceStack> stack) {
-        ServerPlayer player = stack.getSource().getPlayer();
-        if (player != null && mod.getManager() != null) {
-            ShopManager manager = mod.getManager();
-            Shop shop = manager.getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
-            shop.openShop(player);
+        try {
+            ServerPlayer player = stack.getSource().getPlayer();
+            if (player != null && mod.getManager() != null) {
+                ShopManager manager = mod.getManager();
+                Shop shop = manager.getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
+                shop.openShop(player);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return 1;
     }
@@ -52,6 +56,8 @@ public class ShopCommand {
                 player.sendSystemMessage(Component.nullToEmpty("You must be holding an item in your hand"));
                 return 1;
             }
+            Shop shop = mod.getManager().getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
+            shop.addItem(itemInHand, DoubleArgumentType.getDouble(stack, "price"));
             // todo; check if shop is already full.
 
         }
