@@ -17,7 +17,7 @@ public class ConfirmSlot extends NoOpSlot {
 
     @Override
     public boolean mayPickup(Player player) {
-        menu.attemptPurchaseFromSlot((ServerPlayer) player);
+        menu.attemptPurchaseFromSlot((ServerPlayer) player, false);
         menu.getShop().openShop((ServerPlayer) player);
         return super.mayPickup(player);
     }

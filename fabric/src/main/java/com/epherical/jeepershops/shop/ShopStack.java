@@ -1,5 +1,10 @@
 package com.epherical.jeepershops.shop;
 
+import com.epherical.jeepershops.BozoFabric;
+import com.epherical.jeepershops.exception.PurchaseException;
+import com.epherical.octoecon.api.Economy;
+import com.epherical.octoecon.api.transaction.Transaction;
+import com.epherical.octoecon.api.user.UniqueUser;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -45,7 +50,31 @@ public class ShopStack {
         return itemStack.isEmpty();
     }
 
-    public boolean attemptPurchase(ServerPlayer player) {
-        return player.getInventory().add(itemStack.copy());
+    public boolean attemptPurchase(ServerPlayer player, Shop shop, boolean forced) throws PurchaseException {
+        Economy economy = BozoFabric.instance.getEconomy();
+        if (player.getInventory().getFreeSlot() == -1) {
+            throw new PurchaseException("No free slots to make purchase");
+        }
+
+        if (forced) {
+            return player.getInventory().add(itemStack.copy());
+        }
+
+        if (economy == null) {
+            throw new PurchaseException("No Economy Mod Installed.");
+        }
+        UniqueUser purchaser = economy.getOrCreatePlayerAccount(player.getUUID());
+        UniqueUser seller = economy.getOrCreatePlayerAccount(shop.getOwner());
+        if (purchaser != null && seller != null) {
+            if (purchaser.hasAmount(economy.getDefaultCurrency(), price)) {
+                Transaction transaction = purchaser.sendTo(seller, economy.getDefaultCurrency(), price);
+                if (transaction.getTransactionResponse() == Transaction.Response.SUCCESS) {
+                    return player.getInventory().add(itemStack.copy());
+                }
+            }
+        } else {
+            throw new PurchaseException("User accounts do not exist");
+        }
+        return false;
     }
 }

@@ -13,7 +13,7 @@
     "homepage": "{{WEBSITE}}",
     "irc": "{{IRC}}"
   },
-  "license": "{{LICENSE}}",
+  "license": "LGPL V3",
   "icon": "",
   "environment": "*",
   "entrypoints": {
@@ -27,6 +27,7 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": "1.20.1"
+    "minecraft": "1.20.1",
+    "octo-economy-api": ">=1.1.0"
   }
 }

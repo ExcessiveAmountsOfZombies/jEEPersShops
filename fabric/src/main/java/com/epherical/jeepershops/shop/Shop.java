@@ -2,7 +2,9 @@ package com.epherical.jeepershops.shop;
 
 import com.epherical.jeepershops.BozoFabric;
 import com.epherical.jeepershops.ShopStorage;
+import com.epherical.jeepershops.exception.PurchaseException;
 import com.epherical.jeepershops.menu.ConfirmPurchaseMenu;
+import com.epherical.jeepershops.menu.RemoveItemMenu;
 import com.epherical.jeepershops.menu.ShopMenu;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -79,6 +81,10 @@ public class Shop {
         return shop;
     }
 
+    public boolean isOwner(UUID uuid) {
+        return this.owner.equals(uuid);
+    }
+
     public UUID getOwner() {
         return owner;
     }
@@ -104,13 +110,37 @@ public class Shop {
         player.openMenu(provider);
     }
 
-    public void attemptPurchase(int slot, ServerPlayer player) {
+    public void removeItemMenu(ServerPlayer player, int slot) {
+        MutableComponent title = Component.literal("Remove Item");
+        SimpleMenuProvider provider = new SimpleMenuProvider((i, inventory, player1) -> {
+            RemoveItemMenu menu = new RemoveItemMenu(MenuType.GENERIC_9x1, i, inventory, 1, this, slot);
+            ShopStack stack = this.items.get(slot);
+            for (int j = 0; j < 4; ++j) {
+                menu.getContainer().setItem(j, new ItemStack(Items.YELLOW_STAINED_GLASS_PANE).setHoverName(Component.nullToEmpty("Confirm Removal of Item")));
+            }
+            for (int j = 5; j < 9; ++j) {
+                menu.getContainer().setItem(j, new ItemStack(Items.RED_STAINED_GLASS_PANE).setHoverName(Component.nullToEmpty("Cancel")));
+            }
+            menu.getContainer().setItem(4, stack.getItemStack());
+            return menu;
+        }, title);
+        player.openMenu(provider);
+    }
+
+    public void attemptPurchase(int slot, ServerPlayer player, boolean forced) {
         ShopStack stack = this.items.get(slot);
-        if (stack.attemptPurchase(player)) {
-            player.sendSystemMessage(Component.literal("You have purchased: ").append(stack.getItemStack().getHoverName()).append(" For " + stack.getPrice()));
-            this.items.remove(slot);
-        } else {
-            player.sendSystemMessage(Component.literal("Purchase could not be completed."));
+        try {
+            if (stack.attemptPurchase(player, this, forced)) {
+                if (!forced) {
+                    player.sendSystemMessage(Component.literal("You have purchased: ").append(stack.getItemStack().getHoverName()).append(" For " + stack.getPrice()));
+                }
+                this.items.remove(slot);
+                saveFile(this);
+            } else {
+                player.sendSystemMessage(Component.literal("Purchase could not be completed."));
+            }
+        } catch (PurchaseException e) {
+            player.sendSystemMessage(Component.literal(e.getMessage()));
         }
     }
 }
