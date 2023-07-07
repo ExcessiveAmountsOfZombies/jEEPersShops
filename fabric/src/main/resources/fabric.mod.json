@@ -8,10 +8,10 @@
     "Thonk"
   ],
   "contact": {
-    "sources": "{{SOURCES}}",
-    "issues": "{{ISSUES}}",
-    "homepage": "{{WEBSITE}}",
-    "irc": "{{IRC}}"
+    "sources": "https://github.com/ExcessiveAmountsOfZombies/jEEPersShops",
+    "issues": "https://github.com/ExcessiveAmountsOfZombies/jEEPersShops/issues",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/jeepersshops",
+    "irc": "https://discord.gg/GZjtAn3F6W"
   },
   "license": "LGPL V3",
   "icon": "",
