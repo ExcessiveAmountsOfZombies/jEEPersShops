@@ -22,7 +22,7 @@
     ]
   },
   "mixins": [
-    "unknown_mod.mixins.json"
+    "jeepers_shops.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.13.3",
