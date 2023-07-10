@@ -1,6 +1,6 @@
 package com.epherical.jeepershops.shop;
 
-import com.epherical.jeepershops.BozoFabric;
+import com.epherical.jeepershops.CommonPlatform;
 import com.epherical.jeepershops.ShopStorage;
 import com.epherical.jeepershops.exception.PurchaseException;
 import com.epherical.jeepershops.menu.ConfirmPurchaseMenu;
@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -69,7 +68,7 @@ public class Shop {
     public static void saveFile(Shop shop) {
         CompoundTag tag = new CompoundTag();
         shop.saveToTag(tag);
-        BozoFabric.instance.getManager().saveShopToFile(shop, tag);
+        CommonPlatform.platform.getManager().saveShopToFile(shop, tag);
     }
 
     public static Shop loadShop(CompoundTag tag) {

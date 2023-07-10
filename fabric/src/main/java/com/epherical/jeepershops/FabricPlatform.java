@@ -1,5 +1,6 @@
 package com.epherical.jeepershops;
 
+import com.epherical.octoecon.api.Economy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -26,6 +27,21 @@ public class FabricPlatform extends CommonPlatform<FabricPlatform> {
     @Override
     public Path getRootConfigPath() {
         return FabricLoader.getInstance().getConfigDir().resolve("BOZO_ID");
+    }
+
+    @Override
+    public Economy getEconomy() {
+        return JeepersShopsFabric.instance.getEconomy();
+    }
+
+    @Override
+    public ShopStorage getStorage() {
+        return JeepersShopsFabric.instance.getStorage();
+    }
+
+    @Override
+    public ShopManager getManager() {
+        return JeepersShopsFabric.instance.getManager();
     }
 
 }

@@ -8,9 +8,9 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.world.level.storage.LevelResource;
 
-public class BozoFabric implements ModInitializer {
+public class JeepersShopsFabric implements ModInitializer {
 
-    public static BozoFabric instance;
+    public static JeepersShopsFabric instance;
 
     private Economy economy;
     private ShopStorage storage;
@@ -20,8 +20,9 @@ public class BozoFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         instance = this;
+        CommonPlatform.create(new FabricPlatform());
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            new ShopCommand(dispatcher, instance);
+            new ShopCommand(dispatcher);
         });
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             storage = new ShopStorage(LevelResource.ROOT, server, "epherical/shops");

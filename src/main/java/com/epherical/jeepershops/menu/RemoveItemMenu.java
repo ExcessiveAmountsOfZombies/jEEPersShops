@@ -1,6 +1,5 @@
 package com.epherical.jeepershops.menu;
 
-import com.epherical.jeepershops.menu.slot.ConfirmSlot;
 import com.epherical.jeepershops.menu.slot.DenySlot;
 import com.epherical.jeepershops.menu.slot.NoOpSlot;
 import com.epherical.jeepershops.menu.slot.RemoveSlot;

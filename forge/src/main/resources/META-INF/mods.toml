@@ -5,7 +5,7 @@ loaderVersion="[40,)" #mandatory This is typically bumped every Minecraft versio
 license="LGPL-3.0"
 #issueTrackerURL="http://my.issue.tracker/" #optional
 [[mods]] #mandatory
-modId="${modId}" #mandatory
+modId="jeepers_shops" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
@@ -20,14 +20,14 @@ description='''
 
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.${modId}]] #optional
+[[dependencies.jeepers_shops]] #optional
    modId="forge" #mandatory
    mandatory=true #mandatory
    versionRange="[37,)" #mandatory
    ordering="NONE"
    side="SERVER"
 # Here's another dependency
-[[dependencies.${modId}]]
+[[dependencies.jeepers_shops]]
    modId="minecraft"
    mandatory=true
    versionRange="[1.18.2,)"

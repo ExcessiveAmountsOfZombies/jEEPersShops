@@ -1,8 +1,7 @@
 package com.epherical.jeepershops.command;
 
-import com.epherical.jeepershops.BozoFabric;
+import com.epherical.jeepershops.CommonPlatform;
 import com.epherical.jeepershops.ShopManager;
-import com.epherical.jeepershops.menu.ShopMenu;
 import com.epherical.jeepershops.shop.Shop;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
@@ -12,19 +11,13 @@ import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
 public class ShopCommand {
 
-    private final BozoFabric mod;
-
-    public ShopCommand(CommandDispatcher<CommandSourceStack> dispatcher, BozoFabric mod) {
-        this.mod = mod;
+    public ShopCommand(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal("shop")
                 .then(Commands.literal("create")
                         .executes(this::createShop))
@@ -41,8 +34,8 @@ public class ShopCommand {
     private int openShop(CommandContext<CommandSourceStack> stack) {
         try {
             ServerPlayer player = stack.getSource().getPlayer();
-            if (player != null && mod.getManager() != null) {
-              ShopManager manager = mod.getManager();
+            if (player != null && CommonPlatform.platform.getManager() != null) {
+              ShopManager manager = CommonPlatform.platform.getManager();
               String arg = StringArgumentType.getString(stack, "name");
                 Shop shop = manager.getShop(arg);
                 if (shop != null) {
@@ -61,8 +54,8 @@ public class ShopCommand {
     private int createShop(CommandContext<CommandSourceStack> stack) {
         try {
             ServerPlayer player = stack.getSource().getPlayer();
-            if (player != null && mod.getManager() != null) {
-                ShopManager manager = mod.getManager();
+            if (player != null && CommonPlatform.platform.getManager() != null) {
+                ShopManager manager = CommonPlatform.platform.getManager();
                 Shop shop = manager.getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
                 shop.openShop(player);
             }
@@ -80,7 +73,7 @@ public class ShopCommand {
                 player.sendSystemMessage(Component.nullToEmpty("You must be holding an item in your hand"));
                 return 1;
             }
-            Shop shop = mod.getManager().getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
+            Shop shop = CommonPlatform.platform.getManager().getOrCreateShop(player.getUUID(), player.getGameProfile().getName());
             if (shop.addItem(itemInHand, DoubleArgumentType.getDouble(stack, "price"))) {
                 player.sendSystemMessage(Component.nullToEmpty("Item Added to shop."));
             } else {

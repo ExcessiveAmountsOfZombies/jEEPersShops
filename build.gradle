@@ -10,6 +10,10 @@ allprojects {
     version = modVersion
     group = mavenGroup
 
+    repositories {
+        maven { url "https://maven.epherical.com/releases" }
+    }
+
 }
 
 subprojects {
@@ -32,6 +36,7 @@ minecraft {
 
 dependencies {
     compileOnly group:'org.spongepowered', name:'mixin', version: mixinVersion
+    compileOnlyApi('com.epherical.octo-economy-api:OctoEconomyApi:1.1.0-1.18.2')
     compileOnlyApi("org.jetbrains:annotations:${project.JBAnnotationsVersion}")
 }
 

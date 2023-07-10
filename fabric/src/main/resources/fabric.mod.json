@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.epherical.jeepershops.BozoFabric"
+      "com.epherical.jeepershops.JeepersShopsFabric"
     ]
   },
   "mixins": [
@@ -27,7 +27,7 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": "1.20.1",
+    "minecraft": ">=1.20",
     "octo-economy-api": ">=1.1.0"
   }
 }

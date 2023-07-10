@@ -1,5 +1,7 @@
 package com.epherical.jeepershops;
 
+import com.epherical.octoecon.api.Economy;
+
 import java.nio.file.Path;
 
 public abstract class CommonPlatform<T> {
@@ -20,5 +22,11 @@ public abstract class CommonPlatform<T> {
     public abstract boolean isServerEnvironment();
 
     public abstract Path getRootConfigPath();
+
+    public abstract Economy getEconomy();
+
+    public abstract ShopStorage getStorage();
+
+    public abstract ShopManager getManager();
 
 }

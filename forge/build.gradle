@@ -36,8 +36,8 @@ configurations {
 }
 
 mixin {
-    // put mixin sets in here
-    // and configs
+    add sourceSets.main, "jeepers_shops-refmaps.json"
+    config "jeepers_shops.mixins.json"
 }
 
 sourceSets {
@@ -68,13 +68,13 @@ minecraft {
         client {
             workingDirectory project.file('run')
             property 'legacyClassPath', '{minecraft_classpath}'
-            arg "-mixin.config=bozoiD.mixins.json"
+            arg "-mixin.config=jeepers_shops.mixins.json"
             // Recommended logging data for a userdev environment
             //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             // Recommended logging level for the console //property 'forge.logging.console.level', 'debug'
-            args '--mod', "${modId}", '--all', '--output', file('src/generated/resources/'), '--existing', rootProject.file('src/main/resources/')
+            args '--mod', "jeepers_shops", '--all', '--output', file('src/generated/resources/'), '--existing', rootProject.file('src/main/resources/')
             mods {
-                "${modId}" {
+                "jeepers_shops" {
                     sources(sourceSets.main, rootProject.sourceSets.main)
                 }
             }
@@ -87,7 +87,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             mods {
-                "${modId}" {
+                "jeepers_shops" {
                     sources(sourceSets.main, rootProject.sourceSets.main)
                 }
             }
@@ -101,9 +101,9 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', "${modId}", '--all', '--output', file('src/generated/resources/'), '--existing', rootProject.file('src/main/resources/')
+            args '--mod', "jeepers_shops", '--all', '--output', file('src/generated/resources/'), '--existing', rootProject.file('src/main/resources/')
             mods {
-                "${modId}" {
+                "jeepers_shops" {
                     sources(sourceSets.main, rootProject.sourceSets.main)
                 }
             }
@@ -115,6 +115,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     implementation(rootProject)
     shade(rootProject)
+    implementation "com.epherical.octo-economy-api:OctoEconomyApi-forge:1.1.0-1.18.2"
     annotationProcessor "org.spongepowered:mixin:${mixinVersion}:processor"
 }
 
@@ -139,7 +140,7 @@ jar {
                 "Implementation-Version": "${modVersion}",
                 "Implementation-Vendor" :"epherical.com",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "${modId}.mixins.json"
+                "MixinConfigs": "jeepers_shops.mixins.json"
         ])
     }
 }

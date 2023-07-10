@@ -1,6 +1,6 @@
 package com.epherical.jeepershops.shop;
 
-import com.epherical.jeepershops.BozoFabric;
+import com.epherical.jeepershops.CommonPlatform;
 import com.epherical.jeepershops.exception.PurchaseException;
 import com.epherical.octoecon.api.Economy;
 import com.epherical.octoecon.api.transaction.Transaction;
@@ -51,7 +51,7 @@ public class ShopStack {
     }
 
     public boolean attemptPurchase(ServerPlayer player, Shop shop, boolean forced) throws PurchaseException {
-        Economy economy = BozoFabric.instance.getEconomy();
+        Economy economy = CommonPlatform.platform.getEconomy();
         if (player.getInventory().getFreeSlot() == -1) {
             throw new PurchaseException("No free slots to make purchase");
         }
