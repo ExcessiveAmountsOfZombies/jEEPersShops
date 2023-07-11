@@ -48,7 +48,8 @@ public class Shop {
         if (items.size() >= 27) {
             return false;
         } else {
-            ShopStack stack = new ShopStack(itemStack.copyAndClear(), price);
+            ShopStack stack = new ShopStack(itemStack.copy(), price);
+            itemStack.setCount(0);
             items.add(stack);
             saveFile(this);
         }
