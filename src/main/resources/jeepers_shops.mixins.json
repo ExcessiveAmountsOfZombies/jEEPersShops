@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.epherical.jeepershops.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "jeepers_shops-refmaps.json",
   "mixins": [
     "ACMAccessor"
   ],
